@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#F8F4FF">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ctext y=%27.9em%27 font-size=%2790%27%3E%F0%9F%8D%93%3C/text%3E%3C/svg%3E">
+<title>Plan de alimentación semanal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F8F4FF; --surface:#FFFFFF; --ink:#3B3355; --muted:#7A7295; --line:#E6DDF5;
+  --berry:#6C5BA8; --straw:#FF8FA8; --straw-deep:#C2456B; --mint-deep:#2E7D5B; --warm:#C0562B;
+  --pink:#FFD9E4; --peach:#FFDEC9; --butter:#FFF1BA; --mint:#D0F0DD; --sky:#D8E9FA; --lilac:#E4DBFA; --coral:#FFD0CB;
+  --shadow:0 6px 18px rgba(108,91,168,.12);
+  --head:"Fredoka","Baloo 2",ui-rounded,"SF Pro Rounded","Segoe UI",system-ui,sans-serif;
+  --body:"Nunito","Quicksand",ui-rounded,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;color:var(--ink);font:16px/1.55 var(--body);background-color:var(--bg);
+  background-image:radial-gradient(#E7DDFA 1.5px,transparent 1.7px);background-size:26px 26px}
+.wrap{max-width:1000px;margin:0 auto;padding:14px 16px 28px}
+.hero{position:relative;overflow:hidden;border-radius:28px;padding:26px 24px;margin:0 0 16px;min-height:158px;
+  background:linear-gradient(120deg,#FFD6E2 0%,#FFE6CB 48%,#E2D8FA 100%)}
+.hero .txt{position:relative;z-index:1;max-width:520px}
+.hero h1{font:600 clamp(1.7rem,5.6vw,2.5rem)/1.08 var(--head);margin:0 0 8px;letter-spacing:-.01em}
+.hero .sub{margin:0;max-width:34ch;font-size:1rem}
+.hf{position:absolute;animation:bob 5.5s ease-in-out infinite;filter:drop-shadow(0 4px 6px rgba(108,91,168,.18))}
+.hf.f1{right:14px;top:12px;width:84px;height:84px}
+.hf.f2{right:104px;top:62px;width:62px;height:62px;animation-delay:-1.3s}
+.hf.f3{right:22px;top:100px;width:58px;height:58px;animation-delay:-2.6s}
+.hf.f4{right:128px;top:-4px;width:50px;height:50px;animation-delay:-3.4s}
+.hf.f5{right:190px;top:84px;width:52px;height:52px;animation-delay:-.6s}
+.hf.f6{right:208px;top:8px;width:46px;height:46px;animation-delay:-4.2s}
+.hf.f7{right:268px;top:60px;width:44px;height:44px;animation-delay:-2s}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-7px) rotate(5deg)}}
+@media (prefers-reduced-motion:reduce){.hf{animation:none}.bar>i{transition:none}}
+@media (max-width:640px){
+  .hero{padding:22px 18px}
+  .hero .txt{padding-right:92px}
+  .hf.f5,.hf.f6,.hf.f7{display:none}
+  .hf.f1{width:70px;height:70px;right:8px}.hf.f2{right:6px;top:84px;width:52px;height:52px}
+  .hf.f3{right:62px;top:104px;width:48px;height:48px}.hf.f4{right:84px;top:6px;width:42px;height:42px}
+}
+.panel[hidden]{display:none}
+
+.tabs{display:flex;gap:6px;padding:5px;background:var(--surface);border:2px solid var(--line);border-radius:99px;
+  position:sticky;top:8px;z-index:5;margin-bottom:16px;box-shadow:var(--shadow)}
+.tab{appearance:none;border:0;background:none;color:var(--muted);font:500 1rem var(--head);flex:1;padding:10px 12px;border-radius:99px;cursor:pointer}
+.tab[aria-selected="true"]{background:var(--lilac);color:var(--berry)}
+.tab:focus-visible,.btn:focus-visible,.item:focus-within,.linkbtn:focus-visible{outline:3px solid var(--berry);outline-offset:2px}
+
+.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(116px,1fr));gap:10px;margin-bottom:14px}
+.stat{border-radius:20px;padding:10px 14px}
+.stat:nth-child(1){background:var(--mint)} .stat:nth-child(2){background:var(--butter)} .stat:nth-child(3){background:var(--peach)}
+.stat:nth-child(4){background:var(--pink)} .stat:nth-child(5){background:var(--sky)} .stat:nth-child(6){background:var(--lilac)} .stat:nth-child(7){background:var(--coral)}
+.stat .k{font-size:.8rem;color:var(--ink);opacity:.75}
+.stat .v{font:500 1.2rem var(--head);font-variant-numeric:tabular-nums}
+.price-row input[type=number]::placeholder{color:#B9B0D0}
+.bar{height:14px;background:var(--lilac);border-radius:99px;overflow:hidden;margin:2px 0 16px}
+.bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--straw),#FFB766);border-radius:99px;width:0;transition:width .3s}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:16px}
+.status{color:var(--muted);font-size:.88rem;margin-right:auto;min-height:1.4em}
+.btn{appearance:none;font:600 .92rem var(--body);border-radius:99px;padding:9px 16px;cursor:pointer;border:2px solid var(--line);background:var(--surface);color:var(--ink)}
+.btn.primary{background:var(--berry);color:#fff;border-color:var(--berry)}
+.btn.danger{border-color:var(--straw);color:var(--straw-deep)}
+.btn.danger.armed{background:var(--straw-deep);border-color:var(--straw-deep);color:#fff}
+.btn.ghost{background:var(--surface)}
+
+.cat{background:var(--surface);border-radius:24px;margin-bottom:16px;overflow:hidden;box-shadow:var(--shadow)}
+.cat.c0{--tint:var(--peach)} .cat.c1{--tint:var(--butter)} .cat.c2{--tint:var(--mint)} .cat.c3{--tint:var(--sky)} .cat.c4{--tint:var(--pink)}
+.cat-h{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--tint,var(--lilac))}
+.cic{width:36px;height:36px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:1.2rem}
+.cat-h h2{font:500 1.1rem var(--head);margin:0;flex:1}
+.cat-h span[data-cat]{font:500 .95rem var(--head);font-variant-numeric:tabular-nums}
+.item{display:grid;grid-template-columns:auto 1fr auto;gap:4px 12px;padding:12px 16px;border-top:2px dotted var(--line);align-items:start}
+.item.done{background:#F3FBF6}
+.item>input[type=checkbox]{appearance:none;-webkit-appearance:none;width:26px;height:26px;border-radius:50%;border:2.5px solid #C9BDE8;background:#fff;display:grid;place-content:center;cursor:pointer;margin:1px 0 0}
+.item>input[type=checkbox]:checked{background:var(--mint-deep);border-color:var(--mint-deep)}
+.item>input[type=checkbox]:checked::after{content:"";width:6px;height:12px;border:solid #fff;border-width:0 3px 3px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.info{cursor:pointer}
+.emo{margin-right:6px}
+.name{font-weight:700}
+.meta{font-size:.84rem;color:var(--muted)}
+.amt{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:600}
+.amt small{display:block;color:var(--muted);font-size:.8rem;font-weight:400}
+.item.done .name{text-decoration:line-through;color:var(--muted)}
+.item.done .amt{color:var(--muted)}
+.price-row{grid-column:2 / -1;display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;font-size:.84rem}
+.price-row .pl{display:flex;align-items:center;gap:8px;color:var(--muted)}
+.price-row input[type=number]{width:108px;font:inherit;padding:6px 10px;border:2px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);font-variant-numeric:tabular-nums}
+.price-row input[type=number]:focus-visible{outline:3px solid var(--berry);outline-offset:1px}
+.delta{font-weight:700;font-variant-numeric:tabular-nums}
+.delta.up{color:var(--warm)} .delta.down{color:var(--mint-deep)} .delta.flat{color:var(--muted);font-weight:400}
+.linkbtn{appearance:none;border:0;background:none;color:var(--berry);font:600 .84rem var(--body);text-decoration:underline;cursor:pointer;padding:2px 0}
+.hist{grid-column:2 / -1;background:var(--bg);border-radius:14px;padding:8px 12px;font-size:.84rem}
+.hist table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+.hist td,.hist th{padding:3px 4px;text-align:left}
+.hist th{color:var(--muted);font-weight:600;font-size:.78rem}
+.hist td:nth-child(n+2),.hist th:nth-child(n+2){text-align:right}
+.hist .empty{color:var(--muted);padding:4px}
+.note{font-size:.84rem;color:var(--muted);margin-top:14px;max-width:70ch}
+
+.today-banner{background:var(--pink);border-radius:20px;padding:10px 16px;margin-bottom:16px;font-weight:700}
+.days{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.day{background:var(--surface);border-radius:24px;overflow:hidden;box-shadow:var(--shadow);position:relative}
+.day.d0{--tint:var(--pink)} .day.d1{--tint:var(--peach)} .day.d2{--tint:var(--butter)} .day.d3{--tint:var(--mint)}
+.day.d4{--tint:var(--sky)} .day.d5{--tint:var(--lilac)} .day.d6{--tint:var(--coral)}
+.day-h{background:var(--tint);padding:12px 16px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.day-h h3{margin:0;font:600 1.3rem var(--head)}
+.day-b{padding:6px 16px 16px}
+.badge{font:500 .85rem var(--head);background:var(--straw-deep);color:#fff;border-radius:99px;padding:3px 12px}
+.day.today{box-shadow:0 0 0 4px var(--straw),0 10px 24px rgba(194,69,107,.22);transform:translateY(-3px)}
+.meal{margin:10px 0}
+.meal b{display:block;font:500 1rem var(--head);color:var(--berry)}
+.fruits{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 6px}
+.fs{display:flex;align-items:center;gap:8px;padding:4px 14px 4px 5px;border-radius:99px;background:var(--bg);font-size:.82rem;line-height:1.2}
+.fs svg{width:34px;height:34px;flex:none;background:#fff;border-radius:50%;padding:3px}
+.fs small{display:block;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 2px}
+.chip{font-size:.82rem;font-weight:600;background:var(--tint);border-radius:99px;padding:3px 12px}
+.girl{margin-top:10px;padding:10px 12px;border-radius:16px;background:var(--bg);font-size:.9rem}
+.girl b{color:var(--berry)}
+.tips{margin-top:22px;background:var(--butter);border-radius:24px;padding:8px 22px 14px;box-shadow:var(--shadow)}
+.tips h2{font:500 1.15rem var(--head)}
+.tips li{margin:9px 0;padding-left:4px;max-width:75ch}
+.tips li::marker{color:var(--berry);font:600 1rem var(--head)}
+.garland{display:flex;justify-content:center;flex-wrap:wrap;gap:14px;padding:6px 16px 36px}
+.garland svg{width:38px;height:38px;opacity:.9}
+@media (max-width:430px){ .tab{font-size:.9rem;padding:9px 4px} }
+@media print{ .tabs,.toolbar,.garland,.hf{display:none} .panel[hidden]{display:block} body{background:#fff} .day.today{transform:none} }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><symbol id="f-strawberry" viewBox="0 0 64 64"><path d="M32 59C18 51 8 39 10 27c1-9 9-13 22-13s21 4 22 13c2 12-8 24-22 32z" fill="#FF8FA8"/><path d="M32 59C18 51 8 39 10 27c1-4 3-7 7-9" fill="none" stroke="#FFB3C4" stroke-width="3" stroke-linecap="round"/><path d="M32 19 21 10l4 11-11-2 10 8zM32 19l11-9-4 11 11-2-10 8z" fill="#8ED6A8"/><g fill="#FFF3D6"><ellipse cx="24" cy="32" rx="1.6" ry="2.6"/><ellipse cx="34" cy="30" rx="1.6" ry="2.6"/><ellipse cx="43" cy="35" rx="1.6" ry="2.6"/><ellipse cx="29" cy="41" rx="1.6" ry="2.6"/><ellipse cx="38" cy="44" rx="1.6" ry="2.6"/><ellipse cx="32" cy="51" rx="1.6" ry="2.6"/><ellipse cx="20" cy="42" rx="1.6" ry="2.6"/></g></symbol><symbol id="f-blueberry" viewBox="0 0 64 64"><circle cx="22" cy="41" r="15" fill="#9AA6F0"/><circle cx="43" cy="41" r="15" fill="#B3A5F2"/><circle cx="32" cy="24" r="15" fill="#8390E6"/><g fill="#5B66B8"><path d="M32 20l3 3-3 3-3-3z"/><path d="M22 37l3 3-3 3-3-3z"/><path d="M43 37l3 3-3 3-3-3z"/></g><g fill="#fff" opacity=".55"><circle cx="26" cy="18" r="3"/><circle cx="16" cy="35" r="2.6"/><circle cx="37" cy="35" r="2.6"/></g></symbol><symbol id="f-kiwi" viewBox="0 0 64 64"><circle cx="32" cy="32" r="27" fill="#D5B58E"/><circle cx="32" cy="32" r="23" fill="#BDE7A0"/><circle cx="32" cy="32" r="9" fill="#F6FBDD"/><ellipse cx="47.0" cy="32.0" rx="1.7" ry="3.0" fill="#4A4258" transform="rotate(90 47.0 32.0)"/><ellipse cx="45.5" cy="38.5" rx="1.7" ry="3.0" fill="#4A4258" transform="rotate(116 45.5 38.5)"/><ellipse cx="41.4" cy="43.7" rx="1.7" ry="3.0" fill="#4A4258" transform="rotate(141 41.4 43.7)"/><ellipse cx="35.3" cy="46.6" rx="1.7" ry="3.0" fill="#4A4258" transform="rotate(167 35.3 46.6)"/><ellipse cx="28.7" cy="46.6" rx="1.7" ry="3.0" fill="#4A4258" transform="rotate(193 28.7 46.6)"/><ellipse cx="22.6" cy="43.7" rx="1.7" ry="3.0" fill="#4A4258" transform="rotate(219 22.6 43.7)"/><ellipse cx="18.5" cy="38.5" rx="1.7" ry="3.0" fill="#4A4258" transform="rotate(244 18.5 38.5)"/><ellipse cx="17.0" cy="32.0" rx="1.7" ry="3.0" fill="#4A4258" transform="rotate(270 17.0 32.0)"/><ellipse cx="18.5" cy="25.5" rx="1.7" ry="3.0" fill="#4A4258" transform="rotate(296 18.5 25.5)"/><ellipse cx="22.6" cy="20.3" rx="1.7" ry="3.0" fill="#4A4258" transform="rotate(321 22.6 20.3)"/><ellipse cx="28.7" cy="17.4" rx="1.7" ry="3.0" fill="#4A4258" transform="rotate(347 28.7 17.4)"/><ellipse cx="35.3" cy="17.4" rx="1.7" ry="3.0" fill="#4A4258" transform="rotate(373 35.3 17.4)"/><ellipse cx="41.4" cy="20.3" rx="1.7" ry="3.0" fill="#4A4258" transform="rotate(399 41.4 20.3)"/><ellipse cx="45.5" cy="25.5" rx="1.7" ry="3.0" fill="#4A4258" transform="rotate(424 45.5 25.5)"/></symbol><symbol id="f-papaya" viewBox="0 0 64 64"><g transform="rotate(-25 32 32)"><ellipse cx="32" cy="33" rx="22" ry="28" fill="#FFB86B"/><ellipse cx="32" cy="33" rx="17" ry="23" fill="#FFCF99"/><ellipse cx="32" cy="33" rx="9" ry="14" fill="#FFE6C7"/><g fill="#4A4258"><circle cx="29" cy="27" r="2.3"/><circle cx="35" cy="30" r="2.3"/><circle cx="29" cy="35" r="2.3"/><circle cx="35" cy="39" r="2.3"/><circle cx="31" cy="42" r="2.1"/></g></g></symbol><symbol id="f-apple" viewBox="0 0 64 64"><circle cx="23" cy="38" r="18" fill="#FF9AAA"/><circle cx="41" cy="38" r="18" fill="#FF9AAA"/><path d="M14 46c4 10 12 14 18 14s14-4 18-14z" fill="#FF9AAA"/><path d="M32 22c0-5 1-9 4-12" fill="none" stroke="#A0795C" stroke-width="3" stroke-linecap="round"/><path d="M36 14c6-6 14-4 15-2-3 5-10 6-15 2z" fill="#8ED6A8"/><ellipse cx="20" cy="34" rx="4" ry="7" fill="#fff" opacity=".4" transform="rotate(20 20 34)"/></symbol><symbol id="f-mandarin" viewBox="0 0 64 64"><circle cx="32" cy="37" r="24" fill="#FFB766"/><path d="M32 13c5-7 14-7 17-5-3 6-10 8-17 5z" fill="#8ED6A8"/><circle cx="32" cy="13.5" r="2.6" fill="#A0795C"/><path d="M17 33a16 16 0 0 1 9-13" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" opacity=".55"/></symbol><symbol id="f-guava" viewBox="0 0 64 64"><circle cx="32" cy="33" r="26" fill="#B9E4A2"/><circle cx="32" cy="33" r="21" fill="#FFB3C3"/><circle cx="32" cy="33" r="10" fill="#FFE1E8"/><ellipse cx="46.0" cy="33.0" rx="1.5" ry="2.2" fill="#FFF3C9" transform="rotate(90 46.0 33.0)"/><ellipse cx="44.1" cy="40.0" rx="1.5" ry="2.2" fill="#FFF3C9" transform="rotate(120 44.1 40.0)"/><ellipse cx="39.0" cy="45.1" rx="1.5" ry="2.2" fill="#FFF3C9" transform="rotate(150 39.0 45.1)"/><ellipse cx="32.0" cy="47.0" rx="1.5" ry="2.2" fill="#FFF3C9" transform="rotate(180 32.0 47.0)"/><ellipse cx="25.0" cy="45.1" rx="1.5" ry="2.2" fill="#FFF3C9" transform="rotate(210 25.0 45.1)"/><ellipse cx="19.9" cy="40.0" rx="1.5" ry="2.2" fill="#FFF3C9" transform="rotate(240 19.9 40.0)"/><ellipse cx="18.0" cy="33.0" rx="1.5" ry="2.2" fill="#FFF3C9" transform="rotate(270 18.0 33.0)"/><ellipse cx="19.9" cy="26.0" rx="1.5" ry="2.2" fill="#FFF3C9" transform="rotate(300 19.9 26.0)"/><ellipse cx="25.0" cy="20.9" rx="1.5" ry="2.2" fill="#FFF3C9" transform="rotate(330 25.0 20.9)"/><ellipse cx="32.0" cy="19.0" rx="1.5" ry="2.2" fill="#FFF3C9" transform="rotate(360 32.0 19.0)"/><ellipse cx="39.0" cy="20.9" rx="1.5" ry="2.2" fill="#FFF3C9" transform="rotate(390 39.0 20.9)"/><ellipse cx="44.1" cy="26.0" rx="1.5" ry="2.2" fill="#FFF3C9" transform="rotate(420 44.1 26.0)"/><path d="M30 6c2 2 5 2 7 0" fill="none" stroke="#7FBF95" stroke-width="3" stroke-linecap="round"/></symbol><symbol id="f-peach" viewBox="0 0 64 64"><circle cx="32" cy="38" r="24" fill="#FFC9A9"/><circle cx="43" cy="42" r="12" fill="#FFA98F" opacity=".55"/><path d="M32 16c-7 9-7 31 0 44" fill="none" stroke="#FF9F85" stroke-width="2.5" stroke-linecap="round"/><path d="M32 16c6-9 15-9 18-6-3 7-12 9-18 6z" fill="#8ED6A8"/><path d="M32 16v-5" stroke="#A0795C" stroke-width="3" stroke-linecap="round"/></symbol></defs></svg>
+<div class="wrap">
+  <header class="hero">
+    <div class="txt">
+      <h1>Plan de alimentación semanal</h1>
+      <p class="sub">El mercado y el menú de la semana para tres, con dieta mediterránea y sabor colombiano.</p>
+    </div>
+    <svg class="hf f1" aria-hidden="true"><use href="#f-strawberry"/></svg>
+    <svg class="hf f2" aria-hidden="true"><use href="#f-kiwi"/></svg>
+    <svg class="hf f3" aria-hidden="true"><use href="#f-blueberry"/></svg>
+    <svg class="hf f4" aria-hidden="true"><use href="#f-mandarin"/></svg>
+    <svg class="hf f5" aria-hidden="true"><use href="#f-peach"/></svg>
+    <svg class="hf f6" aria-hidden="true"><use href="#f-apple"/></svg>
+    <svg class="hf f7" aria-hidden="true"><use href="#f-guava"/></svg>
+  </header>
+
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" id="t-list" aria-controls="p-list" aria-selected="true">🛒 Lista de mercado</button>
+    <button class="tab" role="tab" id="t-menu" aria-controls="p-menu" aria-selected="false">📅 Menú semanal</button>
+  </div>
+
+  <section class="panel" id="p-list" role="tabpanel" aria-labelledby="t-list">
+    <div class="summary">
+      <div class="stat"><div class="k">Comprados</div><div class="v" id="s-count">0 / 0</div></div>
+      <div class="stat"><div class="k">Total estimado</div><div class="v" id="s-total">$0</div></div>
+      <div class="stat"><div class="k">Con precios reales</div><div class="v" id="s-real">$0</div></div>
+      <div class="stat"><div class="k">Diferencia</div><div class="v" id="s-diff">$0</div></div>
+      <div class="stat"><div class="k">Ya comprado</div><div class="v" id="s-done">$0</div></div>
+      <div class="stat"><div class="k">Por comprar</div><div class="v" id="s-left">$0</div></div>
+      <div class="stat"><div class="k">Precios registrados</div><div class="v" id="s-reg">0 / 0</div></div>
+    </div>
+    <div class="bar" aria-hidden="true"><i id="s-bar"></i></div>
+    <div class="toolbar">
+      <span class="status" id="status" role="status" aria-live="polite"></span>
+      <button class="btn ghost" id="export" title="Descarga el historial de precios reales">Exportar precios (CSV)</button>
+      <button class="btn danger" id="wipe" title="Borra todos los precios reales registrados">Borrar precios</button>
+      <button class="btn primary" id="save">Guardar</button>
+      <button class="btn danger" id="reset" title="Desmarca todo; conserva los precios registrados">Reiniciar</button>
+    </div>
+    <div id="list"></div>
+    <p class="note">Marca cada producto al comprarlo; el avance se guarda en este navegador. Escribe el precio real por unidad (kg, und...) para llevar el control: se guarda con la fecha, y cada nuevo valor queda en el historial del producto. <b>Reiniciar</b> solo desmarca la lista y conserva los precios; para borrarlos usa <b>Borrar precios</b>. Los precios estimados no son datos minoristas verificados.</p>
+  </section>
+
+  <section class="panel" id="p-menu" role="tabpanel" aria-labelledby="t-menu" hidden>
+    <div class="today-banner" id="today-banner"></div>
+    <div class="days" id="days"></div>
+    <div class="tips"><h2>Estrategia de preparación y aprovechamiento</h2><ol id="tips"></ol></div>
+  </section>
+</div>
+<footer class="garland" aria-hidden="true"><svg aria-hidden="true"><use href="#f-strawberry"/></svg><svg aria-hidden="true"><use href="#f-kiwi"/></svg><svg aria-hidden="true"><use href="#f-blueberry"/></svg><svg aria-hidden="true"><use href="#f-peach"/></svg><svg aria-hidden="true"><use href="#f-apple"/></svg><svg aria-hidden="true"><use href="#f-mandarin"/></svg><svg aria-hidden="true"><use href="#f-papaya"/></svg><svg aria-hidden="true"><use href="#f-guava"/></svg></footer>
+
+<script>
+const DATA = {"items": [{"cat": "Proteínas", "name": "Pechuga de pollo", "qty": 0.7, "unit": "kg", "price": 21000, "use": "Mar almuerzo y cena", "basis": "Mayorista Bogotá ~17.360/kg (SIPSA) + margen minorista estimado"}, {"cat": "Proteínas", "name": "Muslo / contramuslo de pollo", "qty": 0.8, "unit": "kg", "price": 13000, "use": "Dom almuerzo", "basis": "Estimación"}, {"cat": "Proteínas", "name": "Carne molida de res", "qty": 0.5, "unit": "kg", "price": 30000, "use": "Vie almuerzo (albóndigas)", "basis": "Estimación; res +14,2% anual (IPC DANE, sep 2026)"}, {"cat": "Proteínas", "name": "Lomo de cerdo sin hueso", "qty": 0.6, "unit": "kg", "price": 25000, "use": "Sáb almuerzo", "basis": "Mayorista nacional ~20.519/kg (SIPSA) + margen estimado"}, {"cat": "Proteínas", "name": "Tilapia entera (limpia)", "qty": 1.2, "unit": "kg", "price": 17500, "use": "Mié almuerzo", "basis": "Mayorista ~13.609/kg (SIPSA) + margen estimado"}, {"cat": "Proteínas", "name": "Atún enlatado en agua (170 g)", "qty": 2, "unit": "und", "price": 6800, "use": "Vie cena", "basis": "Estimación"}, {"cat": "Granos, legumbres y tubérculos", "name": "Lentejas", "qty": 0.5, "unit": "kg", "price": 9500, "use": "Lun almuerzo; Dom cena", "basis": "Dato supermercados ~8.950/kg (ene-feb 2026)"}, {"cat": "Granos, legumbres y tubérculos", "name": "Fríjol bola roja", "qty": 0.5, "unit": "kg", "price": 15750, "use": "Jue almuerzo", "basis": "Dato supermercados 7.875/500 g (feb 2026)"}, {"cat": "Granos, legumbres y tubérculos", "name": "Garbanzo", "qty": 0.5, "unit": "kg", "price": 11000, "use": "Vie cena; Sáb cena", "basis": "Estimación"}, {"cat": "Granos, legumbres y tubérculos", "name": "Arroz integral", "qty": 1, "unit": "kg", "price": 7500, "use": "Lun, Jue, Sáb, Dom", "basis": "Estimación (arroz blanco: dato 4.411/kg feb 2026)"}, {"cat": "Granos, legumbres y tubérculos", "name": "Pasta integral 500 g", "qty": 1, "unit": "und", "price": 5500, "use": "Vie almuerzo", "basis": "Estimación"}, {"cat": "Granos, legumbres y tubérculos", "name": "Avena en hojuelas 500 g", "qty": 1, "unit": "und", "price": 4500, "use": "Mar, Jue, Vie desayuno", "basis": "Estimación"}, {"cat": "Granos, legumbres y tubérculos", "name": "Pan integral tajado", "qty": 1, "unit": "paquete", "price": 8500, "use": "Mié, Vie cena; Dom desayuno", "basis": "Estimación"}, {"cat": "Granos, legumbres y tubérculos", "name": "Arepas de maíz", "qty": 15, "unit": "und", "price": 600, "use": "Lun, Mié, Sáb, Dom", "basis": "Estimación"}, {"cat": "Granos, legumbres y tubérculos", "name": "Papa pastusa", "qty": 2, "unit": "kg", "price": 4250, "use": "Mar, Jue, Sáb", "basis": "Dato ~4.050/kg (feb 2026)"}, {"cat": "Granos, legumbres y tubérculos", "name": "Yuca", "qty": 1, "unit": "kg", "price": 3500, "use": "Mar cena; Dom almuerzo", "basis": "Mayorista Medellín 2.450/kg (8 oct 2026) + margen"}, {"cat": "Granos, legumbres y tubérculos", "name": "Plátano (verde y maduro)", "qty": 4, "unit": "und", "price": 1800, "use": "Mié patacones; Jue maduro", "basis": "Estimación"}, {"cat": "Frutas y verduras", "name": "Tomate chonto", "qty": 2, "unit": "kg", "price": 5500, "use": "Varias comidas", "basis": "Mayorista Medellín ~4.460/kg (SIPSA) + margen. Subió en sept"}, {"cat": "Frutas y verduras", "name": "Cebolla cabezona", "qty": 1.5, "unit": "kg", "price": 3000, "use": "Varias comidas", "basis": "Mayorista ~2.250/kg (SIPSA) + margen"}, {"cat": "Frutas y verduras", "name": "Cebolla larga", "qty": 0.5, "unit": "kg", "price": 5000, "use": "Pericos, sopas", "basis": "Estimación"}, {"cat": "Frutas y verduras", "name": "Zanahoria", "qty": 2, "unit": "kg", "price": 2500, "use": "Lentejas, sopa, ensaladas", "basis": "Mayorista ~1.098/kg (sept) + margen. Bajó en sept"}, {"cat": "Frutas y verduras", "name": "Repollo", "qty": 1, "unit": "und", "price": 3500, "use": "Ensaladas Lun y Jue", "basis": "Bajó en sept (SIPSA)"}, {"cat": "Frutas y verduras", "name": "Lechuga batavia", "qty": 1, "unit": "und", "price": 3000, "use": "Ensaladas", "basis": "Bajó en sept (SIPSA)"}, {"cat": "Frutas y verduras", "name": "Espinaca", "qty": 1, "unit": "manojo", "price": 3000, "use": "Sáb cena", "basis": "Estimación"}, {"cat": "Frutas y verduras", "name": "Pepino cohombro", "qty": 3, "unit": "und", "price": 1500, "use": "Ensaladas Lun, Mié, Vie", "basis": "Subió en sept; si está caro, reemplazar por más tomate"}, {"cat": "Frutas y verduras", "name": "Brócoli", "qty": 1, "unit": "und", "price": 4500, "use": "Sáb almuerzo", "basis": "Estimación"}, {"cat": "Frutas y verduras", "name": "Ahuyama", "qty": 1, "unit": "kg", "price": 3200, "use": "Mié cena", "basis": "Estimación"}, {"cat": "Frutas y verduras", "name": "Remolacha", "qty": 0.5, "unit": "kg", "price": 3600, "use": "Mar ensalada", "basis": "Bajó en sept (SIPSA)"}, {"cat": "Frutas y verduras", "name": "Ajo", "qty": 2, "unit": "cabeza", "price": 1000, "use": "Aliño en varias comidas", "basis": "Estimación"}, {"cat": "Frutas y verduras", "name": "Limón", "qty": 0.5, "unit": "kg", "price": 5000, "use": "Aliños y ensaladas", "basis": "Estimación"}, {"cat": "Frutas y verduras", "name": "Cilantro / perejil", "qty": 2, "unit": "manojo", "price": 1000, "use": "Sopas y guisos", "basis": "Estimación"}, {"cat": "Frutas y verduras", "name": "Pimentón", "qty": 1, "unit": "und", "price": 2000, "use": "Guisos", "basis": "Precio mayorista casi se duplicó en sept; se usa solo uno"}, {"cat": "Frutas y verduras", "name": "Fresas 500 g", "qty": 1, "unit": "und", "price": 8000, "use": "Lun desayuno; Mié snack niña (frescas: consumir pronto)", "basis": "Estimación"}, {"cat": "Frutas y verduras", "name": "Arándanos 125 g", "qty": 1, "unit": "und", "price": 11000, "use": "Mar desayuno (avena)", "basis": "Estimación; es la fruta más cara por kilo de la lista"}, {"cat": "Frutas y verduras", "name": "Kiwi", "qty": 4, "unit": "und", "price": 1500, "use": "Lun snack niña; Jue desayuno", "basis": "Estimación"}, {"cat": "Frutas y verduras", "name": "Durazno", "qty": 0.5, "unit": "kg", "price": 9000, "use": "Snack niña Mar, Jue y Sáb", "basis": "Estimación"}, {"cat": "Frutas y verduras", "name": "Papaya", "qty": 0.8, "unit": "kg", "price": 6000, "use": "Mié desayuno", "basis": "Estimación; papaya Maradol subió en sept (SIPSA). Comprar un trozo o papaya pequeña"}, {"cat": "Frutas y verduras", "name": "Manzana", "qty": 0.75, "unit": "kg", "price": 8000, "use": "Vie desayuno; Dom snack niña", "basis": "Estimación"}, {"cat": "Frutas y verduras", "name": "Guayaba", "qty": 0.5, "unit": "kg", "price": 4000, "use": "Sáb desayuno", "basis": "Bajó en sept (SIPSA)"}, {"cat": "Frutas y verduras", "name": "Mandarina", "qty": 1, "unit": "kg", "price": 3500, "use": "Vie snack niña; Dom desayuno", "basis": "Bajó en sept (SIPSA)"}, {"cat": "Lácteos y huevos", "name": "Huevos AA cubeta x30", "qty": 1, "unit": "cubeta", "price": 16500, "use": "Lun, Mié, Jue, Sáb, Dom", "basis": "Mayorista ~465/und (SIPSA) + margen estimado"}, {"cat": "Lácteos y huevos", "name": "Leche entera bolsa 1 L", "qty": 6, "unit": "und", "price": 4300, "use": "Avena, snacks niña", "basis": "Estimación (jun 2022: 3.177–3.700; sin dato actual)"}, {"cat": "Lácteos y huevos", "name": "Yogur natural sin azúcar 1 L", "qty": 1, "unit": "und", "price": 9500, "use": "Jue desayuno; snacks niña", "basis": "Estimación"}, {"cat": "Lácteos y huevos", "name": "Queso campesino 500 g", "qty": 1, "unit": "und", "price": 10000, "use": "Lun, Mié, Jue, Vie", "basis": "Estimación; subió ~17% entre ene 2025 y ene 2026"}, {"cat": "Abarrotes y grasas saludables", "name": "Aceite de oliva extra virgen 250 ml", "qty": 1, "unit": "und", "price": 19500, "use": "Aliños y cocción en frío", "basis": "Carbonell 500 ml = 36.400 (Éxito, dato) → 250 ml estimado"}, {"cat": "Abarrotes y grasas saludables", "name": "Aguacate", "qty": 3, "unit": "und", "price": 3500, "use": "Lun, Mié, Jue, Dom", "basis": "Estimación"}, {"cat": "Abarrotes y grasas saludables", "name": "Maní sin sal 250 g", "qty": 1, "unit": "und", "price": 6000, "use": "Desayunos y lonchera", "basis": "Estimación"}, {"cat": "Abarrotes y grasas saludables", "name": "Panela 1 libra", "qty": 1, "unit": "und", "price": 3000, "use": "Jugos y bebidas", "basis": "Estimación"}, {"cat": "Abarrotes y grasas saludables", "name": "Especias (comino, orégano, laurel, pimienta)", "qty": 1, "unit": "kit", "price": 4500, "use": "Aliños", "basis": "Estimación"}, {"cat": "Abarrotes y grasas saludables", "name": "Canela en rama", "qty": 1, "unit": "und", "price": 2000, "use": "Avena", "basis": "Estimación"}, {"cat": "Abarrotes y grasas saludables", "name": "Vinagre 500 ml", "qty": 1, "unit": "und", "price": 3000, "use": "Aliños", "basis": "Estimación"}], "days": [{"day": "Lunes", "bf": "Huevos pericos (tomate, cebolla larga) con arepa y fresas", "lunch": "Lentejas guisadas con zanahoria y cebolla, arroz integral, ensalada de repollo y zanahoria con limón y aceite de oliva, ½ aguacate", "dinner": "Arepa con queso campesino y aguacate, ensalada de tomate y pepino, vaso de leche", "protein": "Huevo + legumbre (lentejas)", "girl": "Pericos con la cebolla bien cocida; lentejas con más caldo, o licuadas a medias si las rechaza. Snack: kiwi en rodajas y un vaso de leche.", "fruit": "Fresas / kiwi"}, {"day": "Martes", "bf": "Avena cocida en leche con canela, arándanos y maní picado", "lunch": "Pechuga de pollo al horno con ajo, limón y orégano, papa al horno, ensalada de lechuga, tomate y remolacha rallada", "dinner": "Sopa de verduras (zanahoria, yuca, papa) con pollo desmechado sobrante del almuerzo y cilantro", "protein": "Pollo", "girl": "Pollo en tiras finas o desmechado; remolacha rallada fina mezclada con zanahoria. Snack: durazno en gajos.", "fruit": "Arándanos / durazno"}, {"day": "Miércoles", "bf": "Arepa con huevo cocido y aguacate; papaya picada con unas gotas de limón", "lunch": "Tilapia al horno con limón y ajo, patacones al horno (plátano verde), ensalada verde con pepino", "dinner": "Crema de ahuyama con un chorrito de aceite de oliva y tostadas de pan integral con queso", "protein": "Pescado + huevo", "girl": "Tilapia sin espinas, apanada con avena molida y horneada; crema colada si prefiere textura lisa. Snack: fresas con un poco de yogur.", "fruit": "Papaya / fresas"}, {"day": "Jueves", "bf": "Yogur natural con avena, kiwi picado y canela; maní aparte", "lunch": "Fríjoles bola roja con arroz integral, plátano maduro al horno, aguacate y ensalada de repollo", "dinner": "Tortilla española (papa, cebolla y huevo) con ensalada de tomate y lechuga", "protein": "Legumbre (fríjol) + huevo", "girl": "Fríjoles con caldo y sin pimentón; tortilla en cuñas pequeñas. Snack: durazno en gajos.", "fruit": "Kiwi / durazno"}, {"day": "Viernes", "bf": "Avena cocida con manzana rallada y canela; manzana en cubos aparte", "lunch": "Albóndigas de res al horno en salsa de tomate, pasta integral, ensalada de zanahoria rallada", "dinner": "Ensalada de garbanzos con atún, tomate, pepino, cebolla y aceite de oliva", "protein": "Res + pescado (atún) + legumbre", "girl": "Albóndigas pequeñas con zanahoria rallada dentro; en la cena, mini sándwich de atún con garbanzo triturado en pan integral. Snack: mandarina.", "fruit": "Manzana / mandarina"}, {"day": "Sábado", "bf": "Huevos revueltos con cebolla larga, arepa y guayaba", "lunch": "Lomo de cerdo al horno marinado con ajo, comino y limón, papas y brócoli al vapor, ensalada de tomate", "dinner": "Garbanzos guisados con espinaca y tomate sobre arroz integral", "protein": "Cerdo + huevo + legumbre", "girl": "Cerdo en lonjas finas con su jugo para que no quede seco; garbanzos aplastados con el arroz. Snack: durazno en gajos con yogur.", "fruit": "Guayaba / durazno"}, {"day": "Domingo", "bf": "Pan integral tostado con aguacate y huevo cocido; mandarina", "lunch": "Pollo guisado (muslo) con yuca cocida, arroz integral y ensalada de lechuga y tomate", "dinner": "Sopa de lentejas (sobrante del lunes, descongelada) con arepa", "protein": "Huevo + pollo + legumbre", "girl": "Pollo sin piel y desmenuzado; sopa de lentejas licuada a medias. Snack: manzana con cubitos de queso campesino.", "fruit": "Mandarina / manzana"}], "tips": ["1. Legumbres en lote: cocina lentejas, fríjoles y garbanzos en olla a presión el día de compra. Lo que no se coma en 3-4 días, congélalo en porciones (la sopa del domingo sale de las lentejas del lunes).", "2. Sofrito base: licúa y cocina una sola vez tomate, cebolla y ajo con comino y úsalo en lentejas, fríjoles, albóndigas y garbanzos. Ralla de una vez la zanahoria y el repollo de las ensaladas.", "3. Congela por orden de uso: separa y congela desde el primer día el cerdo, la carne molida y el pollo del domingo; pasa a nevera la noche anterior. El pescado va fresco el miércoles (o congélalo apenas lo compres).", "4. Cocina doble: hornea más pechuga el martes para la sopa de la cena, y cocina arroz integral para 3 días, enfriándolo rápido en recipientes bajos. Sobras cocidas, máximo 3-4 días en nevera.", "5. Consume por perecibilidad: fresas, arándanos, durazno, espinaca, lechuga y brócoli en la primera mitad; manzana, mandarina, guayaba, repollo, zanahoria, ahuyama y remolacha al final. Lava las fresas y arándanos justo antes de comerlos. Si el durazno o el kiwi están duros, déjalos madurar fuera de nevera; huesos y pellejos de pollo, a caldo."]};
+const KEY = "plan-alimentacion-v1";
+const $ = s => document.querySelector(s);
+const money = n => "$" + Math.round(n).toLocaleString("es-CO");
+const qtyTxt = n => String(Math.round(n * 100) / 100).replace(".", ",");
+
+/* ---------- storage (puede fallar en vistas previas o modo privado) ---------- */
+let memory = {};
+function load(){ try { const raw = localStorage.getItem(KEY); return raw ? JSON.parse(raw) : {}; } catch(e){ return memory; } }
+function persist(state){ memory = state; try { localStorage.setItem(KEY, JSON.stringify(state)); return true; } catch(e){ return false; } }
+let state = load();
+let savedOk = true;
+
+/* ---------- tabs ---------- */
+const tabs = {list: $("#t-list"), menu: $("#t-menu")};
+function show(which){
+  for (const k in tabs){
+    const on = k === which;
+    tabs[k].setAttribute("aria-selected", on);
+    $("#p-" + k).hidden = !on;
+  }
+  if (which === "menu") scrollToday();
+  try { history.replaceState(null, "", "#" + which); } catch(e){}
+}
+tabs.list.onclick = () => show("list");
+tabs.menu.onclick = () => show("menu");
+
+/* ---------- precios reales (historial con fecha, por producto) ---------- */
+const PKEY = "plan-alimentacion-precios-v1";
+let pmem = {};
+function loadP(){ try { const raw = localStorage.getItem(PKEY); return raw ? JSON.parse(raw) : {}; } catch(e){ return pmem; } }
+function saveP(){ pmem = prices; try { localStorage.setItem(PKEY, JSON.stringify(prices)); return true; } catch(e){ return false; } }
+let prices = loadP();
+const isoToday = () => { const d = new Date(); return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0"); };
+const fmtDate = s => { const [y,m,d] = s.split("-"); return d + "/" + m + "/" + y; };
+const hist = it => prices[it.name] || [];
+const real = it => { const h = hist(it); return h.length ? h[h.length-1].p : null; };
+const unitPrice = it => real(it) ?? it.price;
+const pct = (a, b) => b ? Math.round((a - b) / b * 100) : 0;
+
+/* ---------- lista ---------- */
+const cats = [...new Set(DATA.items.map(i => i.cat))];
+const CATICON = {"Proteínas":"🍗","Granos, legumbres y tubérculos":"🌾","Frutas y verduras":"🍓","Lácteos y huevos":"🥚","Abarrotes y grasas saludables":"🫒"};
+const EMO = [["pollo","🍗"],["res","🥩"],["cerdo","🍖"],["tilapia","🐟"],["atún","🥫"],["lenteja","🫘"],["fríjol","🫘"],["garbanzo","🫘"],["arroz","🍚"],["pasta","🍝"],["avena","🥣"],["pan ","🍞"],["arepa","🫓"],["papa","🥔"],["yuca","🍠"],["plátano","🍌"],["tomate","🍅"],["cebolla","🧅"],["zanahoria","🥕"],["repollo","🥬"],["lechuga","🥬"],["espinaca","🥬"],["pepino","🥒"],["brócoli","🥦"],["ahuyama","🎃"],["remolacha","🟣"],["ajo","🧄"],["limón","🍋"],["cilantro","🌿"],["pimentón","🫑"],["fresa","🍓"],["arándano","🫐"],["kiwi","🥝"],["durazno","🍑"],["papaya","🧡"],["manzana","🍎"],["guayaba","🍐"],["mandarina","🍊"],["huevo","🥚"],["leche","🥛"],["yogur","🥛"],["queso","🧀"],["aceite","🫒"],["aguacate","🥑"],["maní","🥜"],["panela","🍯"],["especias","🧂"],["canela","🪵"],["vinagre","🫙"]];
+const emo = name => { const n = name.toLowerCase() + " "; const hit = EMO.find(([k]) => n.includes(k)); return hit ? hit[1] : "🍽️"; };
+const FRUITKEY = {fresas:"strawberry",arandanos:"blueberry",kiwi:"kiwi",durazno:"peach",papaya:"papaya",manzana:"apple",guayaba:"guava",mandarina:"mandarin"};
+const norm = s => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").trim();
+const fruitSvg = name => { const k = FRUITKEY[norm(name)]; return k ? `<svg aria-hidden="true"><use href="#f-${k}"/></svg>` : ""; };
+const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;");
+function renderList(){
+  const root = $("#list"); root.innerHTML = "";
+  cats.forEach((cat, ci) => {
+    const box = document.createElement("div"); box.className = "cat c" + (ci % 5);
+    box.innerHTML = `<div class="cat-h"><span class="cic" aria-hidden="true">${CATICON[cat] || "🍽️"}</span><h2>${cat}</h2><span data-cat="${esc(cat)}"></span></div>`;
+    DATA.items.forEach((it, idx) => {
+      if (it.cat !== cat) return;
+      const row = document.createElement("div");
+      row.className = "item" + (state[idx] ? " done" : "");
+      row.dataset.i = idx;
+      row.title = "Base del precio estimado: " + it.basis;
+      row.innerHTML = `<input type="checkbox" id="c${idx}" ${state[idx] ? "checked" : ""} data-c="${idx}">
+        <label class="info" for="c${idx}"><span class="name"><span class="emo" aria-hidden="true">${emo(it.name)}</span>${it.name}</span><span class="meta" style="display:block">${it.use}</span></label>
+        <span class="amt">${qtyTxt(it.qty)} ${it.unit}<small id="a${idx}"></small></span>
+        <div class="price-row">
+          <label class="pl">Precio real por ${esc(it.unit)}
+            <input type="number" inputmode="numeric" min="0" step="50" data-p="${idx}" placeholder="${it.price}" aria-label="Precio real de ${esc(it.name)} por ${esc(it.unit)}">
+          </label>
+          <span class="delta" id="d${idx}"></span>
+          <button class="linkbtn" type="button" data-h="${idx}" id="hb${idx}"></button>
+        </div>
+        <div class="hist" id="h${idx}" hidden></div>`;
+      box.appendChild(row);
+      row.querySelector("[data-p]").value = real(it) ?? "";
+    });
+    root.appendChild(box);
+  });
+  root.querySelectorAll("[data-c]").forEach(cb => cb.addEventListener("change", e => {
+    const i = e.target.dataset.c;
+    if (e.target.checked) state[i] = 1; else delete state[i];
+    e.target.closest(".item").classList.toggle("done", e.target.checked);
+    savedOk = persist(state);
+    summary(); setStatus(savedOk ? "Guardado automáticamente" : "No se pudo guardar en este navegador");
+  }));
+  root.querySelectorAll("[data-p]").forEach(inp => {
+    inp.addEventListener("change", e => setPrice(+e.target.dataset.p, e.target.value));
+    inp.addEventListener("keydown", e => { if (e.key === "Enter") e.target.blur(); });
+  });
+  root.querySelectorAll("[data-h]").forEach(b => b.addEventListener("click", () => {
+    const h = $("#h" + b.dataset.h); h.hidden = !h.hidden;
+  }));
+  DATA.items.forEach((_, i) => refreshItem(i));
+  updateCats();
+}
+function setPrice(idx, raw){
+  const it = DATA.items[idx], v = parseFloat(String(raw).replace(",", "."));
+  const h = (prices[it.name] || []).slice(), d = isoToday();
+  const k = h.findIndex(e => e.d === d);
+  if (!isFinite(v) || v <= 0){
+    if (k >= 0) h.splice(k, 1);           // campo vacío: quita la lectura de hoy
+  } else if (k >= 0){ h[k] = {d, p: v}; } // mismo día: reemplaza
+  else { h.push({d, p: v}); }
+  if (h.length) prices[it.name] = h; else delete prices[it.name];
+  const ok = saveP();
+  refreshItem(idx); updateCats(); summary();
+  setStatus(ok ? "Precio guardado ✓" : "No se pudo guardar en este navegador");
+}
+function refreshItem(idx){
+  const it = DATA.items[idx], h = hist(it), cur = real(it);
+  $("#a" + idx).textContent = money(it.qty * unitPrice(it)) + (cur != null ? " (real)" : "");
+  const dl = $("#d" + idx);
+  if (cur == null){ dl.textContent = "Sin precio real aún · estimado " + money(it.price); dl.className = "delta flat"; }
+  else {
+    const p = pct(cur, it.price);
+    dl.className = "delta " + (p > 0 ? "up" : p < 0 ? "down" : "flat");
+    dl.textContent = (p > 0 ? "▲ +" : p < 0 ? "▼ " : "= ") + p + "% vs estimado" + (h.length > 1 ? " · antes " + money(h[h.length-2].p) : "");
+  }
+  $("#hb" + idx).textContent = "Historial (" + h.length + ")";
+  const box = $("#h" + idx);
+  if (!h.length) box.innerHTML = '<div class="empty">Aún no hay precios registrados para este producto.</div>';
+  else {
+    const rows = h.slice().reverse().slice(0, 10).map((e, n, arr) => {
+      const prev = arr[n+1]; // anterior en el tiempo
+      const ch = prev ? pct(e.p, prev.p) : null;
+      return `<tr><td>${fmtDate(e.d)}</td><td>${money(e.p)}</td><td>${ch == null ? "—" : (ch > 0 ? "+" : "") + ch + "%"}</td></tr>`;
+    }).join("");
+    box.innerHTML = `<table><tr><th>Fecha</th><th>Precio / ${esc(it.unit)}</th><th>Cambio</th></tr>${rows}</table>`;
+  }
+}
+function updateCats(){
+  document.querySelectorAll("[data-cat]").forEach(el => {
+    const cat = el.dataset.cat;
+    el.textContent = money(DATA.items.filter(i => i.cat === cat).reduce((a, i) => a + i.qty * unitPrice(i), 0));
+  });
+}
+function summary(){
+  const items = DATA.items;
+  const est = items.reduce((a, i) => a + i.qty * i.price, 0);
+  const tot = items.reduce((a, i) => a + i.qty * unitPrice(i), 0);
+  const done = items.reduce((a, i, idx) => a + (state[idx] ? i.qty * unitPrice(i) : 0), 0);
+  const n = items.length, d = Object.keys(state).length, reg = items.filter(i => real(i) != null).length;
+  $("#s-count").textContent = d + " / " + n;
+  $("#s-total").textContent = money(est);
+  $("#s-real").textContent = money(tot);
+  const diff = tot - est, el = $("#s-diff");
+  el.textContent = (diff > 0 ? "+" : diff < 0 ? "−" : "") + money(Math.abs(diff));
+  el.style.color = diff > 0 ? "var(--warm)" : diff < 0 ? "var(--accent)" : "";
+  $("#s-done").textContent = money(done);
+  $("#s-left").textContent = money(tot - done);
+  $("#s-reg").textContent = reg + " / " + n;
+  $("#s-bar").style.width = (n ? d / n * 100 : 0) + "%";
+}
+let statusTimer;
+function setStatus(t){ const el = $("#status"); el.textContent = t; clearTimeout(statusTimer); statusTimer = setTimeout(() => el.textContent = "", 3500); }
+
+$("#save").onclick = () => { const a = persist(state), b = saveP(); savedOk = a && b; setStatus(savedOk ? "Guardado ✓" : "No se pudo guardar en este navegador"); };
+
+/* confirmación en dos pasos (sin confirm(), que algunas vistas bloquean) */
+function twoStep(btn, armedText, action){
+  const label = btn.textContent; let armed = false, timer;
+  const disarm = () => { armed = false; clearTimeout(timer); btn.classList.remove("armed"); btn.textContent = label; };
+  btn.onclick = () => {
+    if (!armed){ armed = true; btn.classList.add("armed"); btn.textContent = armedText; timer = setTimeout(disarm, 4000); return; }
+    disarm(); action();
+  };
+}
+twoStep($("#reset"), "¿Seguro? Toca de nuevo", () => {
+  state = {}; persist(state); renderList(); summary(); setStatus("Lista reiniciada (precios conservados)");
+});
+twoStep($("#wipe"), "¿Borrar todo el historial?", () => {
+  prices = {}; saveP(); renderList(); summary(); setStatus("Precios borrados");
+});
+
+$("#export").onclick = () => {
+  const lines = ["fecha,producto,unidad,precio_estimado,precio_real"];
+  DATA.items.forEach(it => hist(it).forEach(e => lines.push([e.d, '"' + it.name.replace(/"/g,'""') + '"', it.unit, it.price, e.p].join(","))));
+  if (lines.length === 1){ setStatus("Aún no hay precios para exportar"); return; }
+  try {
+    const url = URL.createObjectURL(new Blob(["﻿" + lines.join("\n")], {type: "text/csv;charset=utf-8"}));
+    const a = document.createElement("a"); a.href = url; a.download = "precios-" + isoToday() + ".csv";
+    document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+    setStatus("CSV descargado");
+  } catch(e){ setStatus("No se pudo descargar en esta vista"); }
+};
+
+/* ---------- menú ---------- */
+const NAMES = ["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
+function todayName(){ return NAMES[new Date().getDay()]; }
+function renderMenu(){
+  const t = todayName();
+  const fruitOf = d => d.fruit ? d.fruit.split("/").map(s => s.trim()) : [];
+  $("#today-banner").textContent = "📍 Hoy es " + t.toLowerCase() + ": su tarjeta está resaltada.";
+  const root = $("#days"); root.innerHTML = "";
+  DATA.days.forEach((d, di) => {
+    const isToday = d.day === t;
+    const [fb, fs] = fruitOf(d);
+    const el = document.createElement("article");
+    el.className = "day d" + (di % 7) + (isToday ? " today" : "");
+    if (isToday) el.id = "today";
+    const fr = (name, label) => name ? `<span class="fs">${fruitSvg(name)}<span><small>${label}</small>${name}</span></span>` : "";
+    el.innerHTML = `<div class="day-h"><h3>${d.day}</h3>${isToday ? '<span class="badge">Hoy</span>' : ""}</div>
+      <div class="day-b">
+        <div class="meal"><b>🥣 Desayuno</b>${d.bf}</div>
+        <div class="meal"><b>🍲 Almuerzo</b>${d.lunch}</div>
+        <div class="meal"><b>🌙 Cena</b>${d.dinner}</div>
+        <div class="fruits">${fr(fb, "Fruta del desayuno")}${fr(fs, "Snack de la niña")}</div>
+        <div class="chips"><span class="chip">${d.protein}</span></div>
+        <div class="girl"><b>🌈 Para la niña:</b> ${d.girl}</div>
+      </div>`;
+    root.appendChild(el);
+  });
+  $("#tips").innerHTML = DATA.tips.map(x => "<li>" + x.replace(/^\d+\.\s*/, "") + "</li>").join("");
+}
+function scrollToday(){ const el = $("#today"); if (el) setTimeout(() => el.scrollIntoView({behavior:"smooth", block:"center"}), 50); }
+
+renderList(); summary(); renderMenu();
+if (location.hash === "#menu") show("menu");
+/* si la pestaña queda abierta de un día para otro, actualiza el resaltado */
+setInterval(() => { if (document.querySelector(".day.today")?.querySelector("h3").firstChild.textContent !== todayName()) renderMenu(); }, 60000);
+</script>
+</body>
+</html>
